@@ -1,0 +1,29 @@
+services:
+
+  nexus:
+
+    image: sonatype/nexus3:latest
+
+    container_name: nexus
+
+    restart: unless-stopped
+
+    ports:
+       - "8081:8081"
+       - "8082:8082"
+       - "8083:8083"
+       - "8084:8084"
+
+    environment:
+      TZ: Africa/Casablanca
+
+    volumes:
+      - /home/saphae/devsecops/data/nexus:/nexus-data
+
+    networks:
+      - devsecops-network
+
+networks:
+
+  devsecops-network:
+    external: true
