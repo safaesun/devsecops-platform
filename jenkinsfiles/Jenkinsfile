@@ -1,5 +1,22 @@
 pipeline {
+
     agent any
+
+    parameters {
+
+        string(
+            name: 'APP_REPOSITORY',
+            defaultValue: 'https://github.com/jad-raounak/myi-unicom-nova-ai.git',
+            description: 'Repository of the application to build'
+        )
+
+        string(
+            name: 'APP_BRANCH',
+            defaultValue: 'main',
+            description: 'Branch to build'
+        )
+
+    }
 
     stages {
 
