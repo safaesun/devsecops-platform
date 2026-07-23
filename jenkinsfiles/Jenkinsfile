@@ -22,15 +22,66 @@ pipeline {
 
         stage('Initialization') {
             steps {
-                echo 'DevSecOps Pipeline initialized successfully.'
+                echo '======================================='
+                echo ' DevSecOps Platform Pipeline Started'
+                echo '======================================='
+
+                echo "Repository : ${params.APP_REPOSITORY}"
+                echo "Branch     : ${params.APP_BRANCH}"
+            }
+        }
+
+        stage('Checkout Application') {
+            steps {
+
+                sh """
+                    rm -rf application
+
+                    git clone \
+                        --branch ${params.APP_BRANCH} \
+                        ${params.APP_REPOSITORY} \
+                        application
+                """
+
+            }
+        }
+
+        stage('Verify Application') {
+            steps {
+
+                sh '''
+                    echo "Application content"
+
+                    ls -la application
+
+                    test -f application/Dockerfile
+
+                    echo "Dockerfile found."
+
+                    test -f application/composer.json
+
+                    echo "composer.json found."
+                '''
+
             }
         }
 
     }
 
     post {
-        always {
-            echo 'Pipeline terminé.'
+
+        success {
+            echo 'Pipeline executed successfully.'
         }
+
+        failure {
+            echo 'Pipeline failed.'
+        }
+
+        always {
+            echo 'End of pipeline.'
+        }
+
     }
+
 }
