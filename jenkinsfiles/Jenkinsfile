@@ -1,4 +1,4 @@
-pipeline {
+kpipeline {
 
     agent any
 
@@ -22,26 +22,29 @@ pipeline {
 
         stage('Initialization') {
             steps {
+
                 echo '======================================='
                 echo ' DevSecOps Platform Pipeline Started'
                 echo '======================================='
 
                 echo "Repository : ${params.APP_REPOSITORY}"
                 echo "Branch     : ${params.APP_BRANCH}"
+
             }
         }
 
         stage('Checkout Application') {
             steps {
 
-                sh """
-                    rm -rf application
+                dir('application') {
 
-                    git clone \
-                        --branch ${params.APP_BRANCH} \
-                        ${params.APP_REPOSITORY} \
-                        application
-                """
+                    git(
+                        url: params.APP_REPOSITORY,
+                        branch: params.APP_BRANCH,
+                        credentialsId: 'github-pat'
+                    )
+
+                }
 
             }
         }
@@ -50,17 +53,22 @@ pipeline {
             steps {
 
                 sh '''
-                    echo "Application content"
+                    echo "======================================="
+                    echo "Application successfully cloned"
+                    echo "======================================="
 
-                    ls -la application
+                    ls -la
 
-                    test -f application/Dockerfile
+                    echo ""
+                    echo "Checking Dockerfile..."
+
+                    test -f Dockerfile
 
                     echo "Dockerfile found."
 
-                    test -f application/composer.json
+                    echo ""
+                    echo "Application verification completed."
 
-                    echo "composer.json found."
                 '''
 
             }
