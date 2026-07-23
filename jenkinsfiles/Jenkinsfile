@@ -52,24 +52,36 @@ pipeline {
         stage('Verify Application') {
             steps {
 
-                sh '''
-                    echo "======================================="
-                    echo "Application successfully cloned"
-                    echo "======================================="
+                dir('application') {
 
-                    ls -la
+                    sh '''
+                        echo "======================================="
+                        echo "Application successfully cloned"
+                        echo "======================================="
 
-                    echo ""
-                    echo "Checking Dockerfile..."
+                        echo ""
+                        echo "Application root:"
+                        pwd
 
-                    test -f Dockerfile
+                        echo ""
+                        echo "Application content:"
+                        ls -la
 
-                    echo "Dockerfile found."
+                        echo ""
+                        echo "Checking Dockerfile..."
+                        test -f Dockerfile
+                        echo "Dockerfile found."
 
-                    echo ""
-                    echo "Application verification completed."
+                        echo ""
+                        echo "Checking composer.json..."
+                        test -f composer.json
+                        echo "composer.json found."
 
-                '''
+                        echo ""
+                        echo "Application verification completed."
+                    '''
+
+                }
 
             }
         }
