@@ -85,7 +85,41 @@ pipeline {
 
             }
         }
+        stage('Detect Project') {
 
+           steps {
+
+               dir('application') {
+
+                   script {
+
+                       def output = sh(
+                           script: '../scripts/detect-project.sh',
+                    	   returnStdout: true
+                       ).trim()
+
+                       echo output
+
+                       output.split("\n").each { line ->
+
+                           def parts = line.tokenize("=")
+
+                           if (parts.size() == 2) {
+                               env."${parts[0]}" = parts[1]
+                           }
+
+                       }
+
+                       echo "Detected language : ${env.LANGUAGE}"
+                       echo "Detected build tool : ${env.BUILD_TOOL}"
+
+                   }
+
+               }
+
+           }
+
+	}
     }
 
     post {
