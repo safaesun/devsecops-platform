@@ -85,41 +85,99 @@ pipeline {
 
             }
         }
+
         stage('Detect Project') {
 
-           steps {
+            steps {
 
-               dir('application') {
+                dir('application') {
 
-                   script {
+                    script {
 
-                       def output = sh(
-                           script: '../scripts/detect-project.sh',
-                    	   returnStdout: true
-                       ).trim()
+                        def output = sh(
+                            script: '../scripts/detect-project.sh',
+                            returnStdout: true
+                        ).trim()
 
-                       echo output
+                        echo output
 
-                       output.split("\n").each { line ->
+                        output.split("\n").each { line ->
 
-                           def parts = line.tokenize("=")
+                            def parts = line.tokenize("=")
 
-                           if (parts.size() == 2) {
-                               env."${parts[0]}" = parts[1]
-                           }
+                            if (parts.size() == 2) {
+                                env."${parts[0]}" = parts[1]
+                            }
 
-                       }
+                        }
 
-                       echo "Detected language : ${env.LANGUAGE}"
-                       echo "Detected build tool : ${env.BUILD_TOOL}"
+                        echo "Detected language : ${env.LANGUAGE}"
+                        echo "Detected build tool : ${env.BUILD_TOOL}"
 
-                   }
+                    }
 
-               }
+                }
 
-           }
+            }
 
-	}
+        }
+
+        stage('Retrieve Secrets') {
+
+            steps {
+
+                dir('application') {
+
+                    script {
+
+                        withCredentials([
+                            string(
+                                credentialsId: 'vault-token',
+                                variable: 'VAULT_TOKEN'
+                            )
+                        ]) {
+
+                            def output = sh(
+                                script: '../scripts/retrieve-secrets.sh',
+                                returnStdout: true
+                            ).trim()
+
+                            output.split("\n").each { line ->
+
+                                if (line.startsWith("GITHUB_TOKEN=")) {
+                                    env.GITHUB_TOKEN = line.replace("GITHUB_TOKEN=", "")
+                                }
+
+                                if (line.startsWith("SONAR_TOKEN=")) {
+                                    env.SONAR_TOKEN = line.replace("SONAR_TOKEN=", "")
+                                }
+
+                                if (line.startsWith("NEXUS_USERNAME=")) {
+                                    env.NEXUS_USERNAME = line.replace("NEXUS_USERNAME=", "")
+                                }
+
+                                if (line.startsWith("NEXUS_PASSWORD=")) {
+                                    env.NEXUS_PASSWORD = line.replace("NEXUS_PASSWORD=", "")
+                                }
+
+                                if (line.startsWith("COSIGN_PASSWORD=")) {
+                                    env.COSIGN_PASSWORD = line.replace("COSIGN_PASSWORD=", "")
+                                }
+
+                            }
+
+                            echo "Vault secrets successfully retrieved."
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+
     }
 
     post {
