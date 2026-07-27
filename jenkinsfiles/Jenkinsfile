@@ -6,14 +6,14 @@ pipeline {
 
         string(
             name: 'APP_REPOSITORY',
-            defaultValue: 'https://github.com/jad-raounak/myi-unicom-nova-ai.git',
-            description: 'Repository of the application to build'
+            defaultValue: '',
+            description: 'Git repository URL of the application'
         )
 
         string(
             name: 'APP_BRANCH',
             defaultValue: 'main',
-            description: 'Branch to build'
+            description: 'Git branch of the application'
         )
 
     }
@@ -21,35 +21,56 @@ pipeline {
     stages {
 
         stage('Initialization') {
+
             steps {
+
+                script {
+
+                    if (!params.APP_REPOSITORY?.trim()) {
+                        error("APP_REPOSITORY was not received from the webhook.")
+                    }
+
+                    if (!params.APP_BRANCH?.trim()) {
+                        error("APP_BRANCH was not received from the webhook.")
+                    }
+
+                    env.APP_REPOSITORY = params.APP_REPOSITORY
+
+                    env.APP_BRANCH = params.APP_BRANCH.replace("refs/heads/", "")
+
+                }
 
                 echo '======================================='
                 echo ' DevSecOps Platform Pipeline Started'
                 echo '======================================='
 
-                echo "Repository : ${params.APP_REPOSITORY}"
-                echo "Branch     : ${params.APP_BRANCH}"
+                echo "Application Repository : ${env.APP_REPOSITORY}"
+                echo "Application Branch     : ${env.APP_BRANCH}"
 
             }
+
         }
 
         stage('Checkout Application') {
+
             steps {
 
                 dir('application') {
 
                     git(
-                        url: params.APP_REPOSITORY,
-                        branch: params.APP_BRANCH,
+                        url: env.APP_REPOSITORY,
+                        branch: env.APP_BRANCH,
                         credentialsId: 'github-pat'
                     )
 
                 }
 
             }
+
         }
 
         stage('Verify Application') {
+
             steps {
 
                 dir('application') {
@@ -84,6 +105,7 @@ pipeline {
                 }
 
             }
+
         }
 
         stage('Detect Project') {
@@ -106,7 +128,9 @@ pipeline {
                             def parts = line.tokenize("=")
 
                             if (parts.size() == 2) {
+
                                 env."${parts[0]}" = parts[1]
+
                             }
 
                         }
@@ -183,15 +207,27 @@ pipeline {
     post {
 
         success {
-            echo 'Pipeline executed successfully.'
+
+            echo "======================================="
+            echo "Pipeline executed successfully."
+            echo "======================================="
+
         }
 
         failure {
-            echo 'Pipeline failed.'
+
+            echo "======================================="
+            echo "Pipeline failed."
+            echo "======================================="
+
         }
 
         always {
-            echo 'End of pipeline.'
+
+            echo "======================================="
+            echo "End of pipeline."
+            echo "======================================="
+
         }
 
     }
