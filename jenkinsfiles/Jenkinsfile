@@ -2,10 +2,6 @@ pipeline {
 
     agent any
 
-    triggers {
-        githubPush()
-    }
-
     parameters {
 
         string(
