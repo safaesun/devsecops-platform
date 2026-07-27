@@ -6,7 +6,7 @@ echo "======================================="
 echo "Retrieving secrets from Vault..."
 echo "======================================="
 
-export VAULT_ADDR="http://127.0.0.1:8200"
+export VAULT_ADDR="http://192.168.56.109:8200"
 
 if [ -z "$VAULT_TOKEN" ]; then
     echo "ERROR: VAULT_TOKEN is not defined."

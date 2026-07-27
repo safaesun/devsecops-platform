@@ -1,7 +1,13 @@
 services:
 
   jenkins:
+
+    build:
+      context: ../../
+      dockerfile: dockerfiles/jenkins/Dockerfile
+
     image: devsecops-jenkins:lts
+
     container_name: jenkins
 
     restart: unless-stopped
