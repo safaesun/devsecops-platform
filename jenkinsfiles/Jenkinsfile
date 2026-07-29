@@ -175,6 +175,9 @@ pipeline {
                                 if (line.startsWith("SONAR_TOKEN=")) {
                                     env.SONAR_TOKEN = line.replace("SONAR_TOKEN=", "")
                                 }
+                                if (line.startsWith("SONAR_HOST_URL=")) {
+                                    env.SONAR_HOST_URL = line.replace("SONAR_HOST_URL=", "")
+                                }
 
                                 if (line.startsWith("NEXUS_USERNAME=")) {
                                     env.NEXUS_USERNAME = line.replace("NEXUS_USERNAME=", "")
