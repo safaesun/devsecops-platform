@@ -218,6 +218,19 @@ pipeline {
             }
 
         }
+        stage('SonarQube Analysis') {
+
+            steps {
+
+                dir('application') {
+
+                    sh '../scripts/sonarqube.sh'
+
+                }
+
+            }
+
+        }
     }
 
     post {
