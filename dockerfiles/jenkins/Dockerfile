@@ -18,9 +18,19 @@ RUN apt-get update && \
     python3 \
     python3-pip \
     python3-venv \
-    pipx && \
+    pipx \
+    php-cli \
+    php-mbstring \
+    php-xml \
+    php-curl  \
+    php-zip &&  \
     rm -rf /var/lib/apt/lists/*
 
+# ============================================================
+# Composer
+# ============================================================
+
+COPY --from=composer:2 /usr/bin/composer /usr/local/bin/composer
 # ============================================================
 # Docker CLI
 # ============================================================
