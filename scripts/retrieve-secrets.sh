@@ -16,6 +16,7 @@ fi
 GITHUB_TOKEN=$(vault kv get -field=token secret/devsecops/github)
 
 SONAR_TOKEN=$(vault kv get -field=token secret/devsecops/sonar)
+SONAR_HOST_URL=$(vault kv get -field=SONAR_HOST_URL secret/devsecops/sonar)
 
 NEXUS_USERNAME=$(vault kv get -field=username secret/devsecops/nexus)
 
