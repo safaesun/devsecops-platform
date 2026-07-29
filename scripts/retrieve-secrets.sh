@@ -16,6 +16,7 @@ fi
 GITHUB_TOKEN=$(vault kv get -field=token secret/devsecops/github)
 
 SONAR_TOKEN=$(vault kv get -field=token secret/devsecops/sonar)
+
 SONAR_HOST_URL=$(vault kv get -field=SONAR_HOST_URL secret/devsecops/sonar)
 
 NEXUS_USERNAME=$(vault kv get -field=username secret/devsecops/nexus)
@@ -26,11 +27,13 @@ COSIGN_PASSWORD=$(vault kv get -field=password secret/devsecops/cosign)
 
 echo "✓ GitHub token loaded"
 echo "✓ Sonar token loaded"
+echo "✓ Sonar URL loaded"
 echo "✓ Nexus credentials loaded"
 echo "✓ Cosign password loaded"
 
 echo "GITHUB_TOKEN=${GITHUB_TOKEN}"
 echo "SONAR_TOKEN=${SONAR_TOKEN}"
+echo "SONAR_HOST_URL=${SONAR_HOST_URL}"
 echo "NEXUS_USERNAME=${NEXUS_USERNAME}"
 echo "NEXUS_PASSWORD=${NEXUS_PASSWORD}"
 echo "COSIGN_PASSWORD=${COSIGN_PASSWORD}"
