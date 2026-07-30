@@ -237,6 +237,19 @@ pipeline {
             }
 
         }
+        stage('OWASP Dependency Check') {
+
+            steps {
+
+                dir('application') {
+
+                    sh '../scripts/dependency-check.sh'
+
+                }
+
+            }
+
+        }
     }
 
     post {
