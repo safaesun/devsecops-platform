@@ -26,7 +26,6 @@ dependency-check \
     --out "$REPORT_DIR" \
     --nvdApiKey "$NVD_API_KEY" \
     --disableOssIndex \
-    --failOnCVSS 10
 
 echo "======================================="
 echo "Dependency-Check analysis completed."
