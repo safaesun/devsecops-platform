@@ -175,8 +175,13 @@ pipeline {
                                 if (line.startsWith("SONAR_TOKEN=")) {
                                     env.SONAR_TOKEN = line.replace("SONAR_TOKEN=", "")
                                 }
+
                                 if (line.startsWith("SONAR_HOST_URL=")) {
                                     env.SONAR_HOST_URL = line.replace("SONAR_HOST_URL=", "")
+                                }
+
+                                if (line.startsWith("NVD_API_KEY=")) {
+                                    env.NVD_API_KEY = line.replace("NVD_API_KEY=", "")
                                 }
 
                                 if (line.startsWith("NEXUS_USERNAME=")) {
@@ -194,6 +199,7 @@ pipeline {
                             }
 
                             echo "Vault secrets successfully retrieved."
+                            echo "NVD API Key loaded: ${env.NVD_API_KEY ? 'YES' : 'NO'}"
 
                         }
 
