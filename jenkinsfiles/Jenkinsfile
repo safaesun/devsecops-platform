@@ -250,6 +250,19 @@ pipeline {
             }
 
         }
+        stage('Gitleaks Secret Scan') {
+
+            steps {
+
+                dir('application') {
+
+                    sh '../scripts/gitleaks.sh'
+
+                }
+
+            }
+
+        }
     }
 
     post {
