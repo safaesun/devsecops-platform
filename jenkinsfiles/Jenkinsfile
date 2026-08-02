@@ -297,6 +297,15 @@ pipeline {
         }
 
         always {
+             
+
+            archiveArtifacts artifacts: 'application/reports/**/*.html', fingerprint: true
+     
+            archiveArtifacts artifacts: 'application/reports/**/*.json', fingerprint: true
+
+            archiveArtifacts artifacts: 'application/reports/**/*.xml', fingerprint: true
+
+            archiveArtifacts artifacts: 'application/reports/**/*.txt', fingerprint: true
 
             echo "======================================="
             echo "End of pipeline."
