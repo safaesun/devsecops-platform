@@ -289,6 +289,19 @@ pipeline {
             }
 
         }
+        stage('Trivy Docker Image Scan') {
+
+            steps {
+
+                dir('application') {
+
+                    sh '../scripts/trivy-image.sh'
+
+                }
+
+            }
+
+        }
     }
 
     post {
