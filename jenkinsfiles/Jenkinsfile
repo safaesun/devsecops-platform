@@ -263,6 +263,19 @@ pipeline {
             }
 
         }
+        stage('Build Docker Image') {
+
+            steps {
+
+                dir('application') {
+
+                    sh '../scripts/build-image.sh'
+
+                }
+
+            }
+
+        }
         stage('Trivy Filesystem Scan') {
 
             steps {
