@@ -184,14 +184,6 @@ pipeline {
                                     env.NVD_API_KEY = line.replace("NVD_API_KEY=", "")
                                 }
 
-                                if (line.startsWith("NEXUS_USERNAME=")) {
-                                    env.NEXUS_USERNAME = line.replace("NEXUS_USERNAME=", "")
-                                }
-
-                                if (line.startsWith("NEXUS_PASSWORD=")) {
-                                    env.NEXUS_PASSWORD = line.replace("NEXUS_PASSWORD=", "")
-                                }
-
                                 if (line.startsWith("COSIGN_PASSWORD=")) {
                                     env.COSIGN_PASSWORD = line.replace("COSIGN_PASSWORD=", "")
                                 }
