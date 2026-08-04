@@ -294,6 +294,19 @@ pipeline {
             }
 
         }
+        stage('Generate SBOM') {
+
+            steps {
+
+                dir('application') {
+
+                     sh '../scripts/syft.sh'
+
+                }
+
+            }
+
+        }
         stage('Cleanup') {
 
             steps {
