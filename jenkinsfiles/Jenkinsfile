@@ -294,6 +294,19 @@ pipeline {
             }
 
         }
+        stage('Cleanup') {
+
+            steps {
+
+                dir('application') {
+
+                    sh '../scripts/cleanup.sh'
+
+                }
+
+            }
+
+        }
     }
 
     post {
@@ -324,6 +337,8 @@ pipeline {
             archiveArtifacts artifacts: 'application/reports/**/*.xml', fingerprint: true
 
             archiveArtifacts artifacts: 'application/reports/**/*.txt', fingerprint: true
+     
+            cleanWs()
 
             echo "======================================="
             echo "End of pipeline."
