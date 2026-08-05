@@ -307,28 +307,30 @@ pipeline {
             }
 
         }
-        stage('Sign Docker Image') {
+        stage('Docker Hub Login') {
 
             steps {
 
                 dir('application') {
 
-                     withCredentials([
+                    withCredentials([
 
-                         string(
-                             credentialsId: 'cosign-private-key',
-                             variable: 'COSIGN_PRIVATE_KEY'
-                         )
+                        usernamePassword(
+                            credentialsId: 'dockerhub-credentials',
+                            usernameVariable: 'DOCKERHUB_USERNAME',
+                            passwordVariable: 'DOCKERHUB_TOKEN'
+                        )
 
-                     ]) {
+                    ]) {
 
-                        sh '../scripts/cosign.sh'
+                       sh '../scripts/docker-login.sh'
 
-                     }
+                    }
 
                 }
 
-             }
+            }
+
         }
         stage('Cleanup') {
 
