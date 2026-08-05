@@ -313,12 +313,22 @@ pipeline {
 
                 dir('application') {
 
-                    sh '../scripts/cosign.sh'
+                     withCredentials([
+
+                         string(
+                             credentialsId: 'cosign-private-key',
+                             variable: 'COSIGN_PRIVATE_KEY'
+                         )
+
+                     ]) {
+
+                        sh '../scripts/cosign.sh'
+
+                     }
 
                 }
 
-            }
-
+             }
         }
         stage('Cleanup') {
 
