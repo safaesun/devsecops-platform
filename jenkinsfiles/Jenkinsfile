@@ -307,6 +307,19 @@ pipeline {
             }
 
         }
+        stage('Sign Docker Image') {
+
+            steps {
+
+                dir('application') {
+
+                    sh '../scripts/cosign.sh'
+
+                }
+
+            }
+
+        }
         stage('Cleanup') {
 
             steps {
