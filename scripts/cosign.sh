@@ -53,6 +53,10 @@ trap cleanup EXIT
 
 echo "$COSIGN_PRIVATE_KEY" > "$KEY_FILE"
 
+echo "===== BEGIN KEY ====="
+cat "$KEY_FILE"
+echo "===== END KEY ====="
+
 chmod 600 "$KEY_FILE"
 
 export COSIGN_PASSWORD
