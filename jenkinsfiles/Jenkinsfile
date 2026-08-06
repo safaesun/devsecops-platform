@@ -299,7 +299,19 @@ pipeline {
 
                 dir('application') {
 
-                    sh '../scripts/trivy-image.sh'
+                   withCredentials([
+
+                       usernamePassword(
+                           credentialsId: 'dockerhub-credentials',
+                           usernameVariable: 'DOCKERHUB_USERNAME',
+                           passwordVariable: 'DOCKERHUB_TOKEN'
+                       )
+
+                   ]) {
+
+                      sh '../scripts/trivy-image.sh'
+
+                   }
 
                 }
 
@@ -312,7 +324,19 @@ pipeline {
 
                 dir('application') {
 
-                     sh '../scripts/syft.sh'
+                   withCredentials([
+
+                       usernamePassword(
+                           credentialsId: 'dockerhub-credentials',
+                           usernameVariable: 'DOCKERHUB_USERNAME',
+                           passwordVariable: 'DOCKERHUB_TOKEN'
+                       )
+
+                   ]) {
+
+                      sh '../scripts/syft.sh'
+
+                   }
 
                 }
 

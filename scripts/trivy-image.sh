@@ -10,6 +10,15 @@ REPORT_DIR="reports/trivy-image"
 
 mkdir -p "${REPORT_DIR}"
 
+if [ -z "$APP_REPOSITORY" ]; then
+    APP_REPOSITORY=$(git config --get remote.origin.url)
+fi
+
+if [ -z "$DOCKERHUB_USERNAME" ]; then
+    echo "DOCKERHUB_USERNAME not found."
+    exit 1
+fi
+
 IMAGE_NAME=$(basename -s .git "$APP_REPOSITORY")
 
 if [ -z "$BUILD_NUMBER" ]; then
@@ -18,7 +27,9 @@ else
     IMAGE_TAG="$BUILD_NUMBER"
 fi
 
-IMAGE="${IMAGE_NAME}:${IMAGE_TAG}"
+FULL_IMAGE_NAME="${DOCKERHUB_USERNAME}/${IMAGE_NAME}"
+
+IMAGE="${FULL_IMAGE_NAME}:${IMAGE_TAG}"
 
 echo "Scanning image : ${IMAGE}"
 
