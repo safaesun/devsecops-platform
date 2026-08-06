@@ -368,6 +368,31 @@ pipeline {
             }
 
         }
+        stage('Docker Hub Push') {
+
+            steps {
+
+                dir('application') {
+
+                   withCredentials([
+
+                       usernamePassword(
+                           credentialsId: 'dockerhub-credentials',
+                           usernameVariable: 'DOCKERHUB_USERNAME',
+                           passwordVariable: 'DOCKERHUB_TOKEN'
+                       )
+
+                   ]) {
+
+                      sh '../scripts/docker-push.sh'
+
+                   }
+
+                }
+
+            }
+
+        }
         stage('Cleanup') {
 
             steps {
