@@ -10,12 +10,9 @@ if [ -z "$APP_REPOSITORY" ]; then
     APP_REPOSITORY=$(git config --get remote.origin.url)
 fi
 
-IMAGE_NAME=$(basename -s .git "$APP_REPOSITORY")
-
-if [ -z "$BUILD_NUMBER" ]; then
-    IMAGE_TAG="local"
-else
-    IMAGE_TAG="$BUILD_NUMBER"
+if [ -z "$DOCKERHUB_USERNAME" ]; then
+    echo "DOCKERHUB_USERNAME not found."
+    exit 1
 fi
 
 if [ -z "$COSIGN_PASSWORD" ]; then
@@ -28,9 +25,31 @@ if [ -z "$COSIGN_PRIVATE_KEY" ]; then
     exit 1
 fi
 
+IMAGE_NAME=$(basename -s .git "$APP_REPOSITORY")
+
+if [ -z "$BUILD_NUMBER" ]; then
+    IMAGE_TAG="local"
+else
+    IMAGE_TAG="$BUILD_NUMBER"
+fi
+
+FULL_IMAGE_NAME="${DOCKERHUB_USERNAME}/${IMAGE_NAME}"
+
+echo "Retrieving image digest..."
+
+IMAGE_DIGEST=$(docker image inspect \
+    "${FULL_IMAGE_NAME}:${IMAGE_TAG}" \
+    --format='{{index .RepoDigests 0}}')
+
+echo "Image : ${IMAGE_DIGEST}"
+
 KEY_FILE=$(mktemp)
 
-trap 'rm -f "$KEY_FILE"' EXIT
+cleanup() {
+    rm -f "$KEY_FILE"
+}
+
+trap cleanup EXIT
 
 echo "$COSIGN_PRIVATE_KEY" > "$KEY_FILE"
 
@@ -38,12 +57,10 @@ chmod 600 "$KEY_FILE"
 
 export COSIGN_PASSWORD
 
-echo "Image : ${IMAGE_NAME}:${IMAGE_TAG}"
-
 cosign sign \
-    --yes \
     --key "$KEY_FILE" \
-    "${IMAGE_NAME}:${IMAGE_TAG}"
+    --yes \
+    "${IMAGE_DIGEST}"
 
 echo ""
 echo "Docker image successfully signed."
