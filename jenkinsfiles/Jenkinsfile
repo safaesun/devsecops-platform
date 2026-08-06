@@ -261,7 +261,19 @@ pipeline {
 
                 dir('application') {
 
-                    sh '../scripts/build-image.sh'
+                   withCredentials([
+
+                       usernamePassword(
+                           credentialsId: 'dockerhub-credentials',
+                           usernameVariable: 'DOCKERHUB_USERNAME',
+                           passwordVariable: 'DOCKERHUB_TOKEN'
+                       )
+
+                   ]) {
+
+                      sh '../scripts/build-image.sh'
+
+                   }
 
                 }
 
