@@ -43,26 +43,12 @@ IMAGE_DIGEST=$(docker image inspect \
 
 echo "Image : ${IMAGE_DIGEST}"
 
-KEY_FILE=$(mktemp)
 
-cleanup() {
-    rm -f "$KEY_FILE"
-}
-
-trap cleanup EXIT
-
-echo "$COSIGN_PRIVATE_KEY" > "$KEY_FILE"
-
-echo "===== BEGIN KEY ====="
-cat "$KEY_FILE"
-echo "===== END KEY ====="
-
-chmod 600 "$KEY_FILE"
 
 export COSIGN_PASSWORD
 
 cosign sign \
-    --key "$KEY_FILE" \
+    --key "$COSIGN_PRIVATE_KEY" \
     --yes \
     "${IMAGE_DIGEST}"
 

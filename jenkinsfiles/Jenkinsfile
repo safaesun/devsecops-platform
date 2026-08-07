@@ -407,7 +407,7 @@ pipeline {
                            passwordVariable: 'DOCKERHUB_TOKEN'
                        ),
 
-                       string(
+                       file(
                            credentialsId: 'cosign-private-key',
                            variable: 'COSIGN_PRIVATE_KEY'
                        )
