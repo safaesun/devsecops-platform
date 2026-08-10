@@ -1,0 +1,40 @@
+replicaCount: 1
+
+image:
+  repository: ""
+  tag: ""
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+
+nameOverride: ""
+fullnameOverride: ""
+
+container:
+  port: 80
+
+env: []
+
+probes:
+  enabled: false
+  path: /
+  port: http
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 80
+
+ingress:
+  enabled: false
+  host: ""
+  entryPoints:
+    - web
+
+resources: {}
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
