@@ -423,6 +423,34 @@ pipeline {
             }
 
         }
+        stage('Deploy to Kubernetes') {
+
+            steps {
+
+                dir('application') {
+
+                   withCredentials([
+                       usernamePassword(
+                           credentialsId: 'dockerhub-credentials',
+                           usernameVariable: 'DOCKERHUB_USERNAME',
+                           passwordVariable: 'DOCKERHUB_TOKEN'
+                       ),
+                       sshUserPrivateKey(
+                           credentialsId: 'k3s-ssh',
+                           keyFileVariable: 'K3S_SSH_KEY',
+                           usernameVariable: 'K3S_USER'
+                       )
+                   ]) {
+
+                      sh '../scripts/deploy.sh'
+
+                   }
+
+                }
+
+            }
+
+        }
         stage('Cleanup') {
 
             steps {
