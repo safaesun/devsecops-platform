@@ -11,9 +11,17 @@ nameOverride: ""
 fullnameOverride: ""
 
 container:
+  port: 9000
+
+nginx:
+  image:
+    repository: nginx
+    tag: alpine
+    pullPolicy: IfNotPresent
   port: 80
 
 env: []
+envFrom: []
 
 probes:
   enabled: false
