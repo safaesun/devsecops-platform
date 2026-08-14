@@ -255,6 +255,19 @@ pipeline {
             }
 
         }
+        stage('Checkov IaC Scan') {
+
+            steps {
+
+                dir('application') {
+
+                    sh '../scripts/checkov.sh'
+
+                }
+
+            }
+
+        }
         stage('Build Docker Image') {
 
             steps {
