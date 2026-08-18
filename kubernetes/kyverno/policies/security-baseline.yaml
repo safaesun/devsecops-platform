@@ -1,0 +1,80 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: security-baseline
+  annotations:
+    policies.kyverno.io/title: Security Baseline
+    policies.kyverno.io/description: >-
+      Regroupe les contrôles de sécurité de base appliqués aux Pods
+      du namespace applications : exécution non-root, limites de
+      ressources, interdiction d'élévation de privilèges, et
+      système de fichiers racine en lecture seule.
+spec:
+  validationFailureAction: Audit
+  background: true
+  rules:
+
+    - name: check-runasnonroot
+      match:
+        any:
+          - resources:
+              kinds:
+                - Pod
+              namespaces:
+                - applications
+      validate:
+        message: "Le conteneur doit s'exécuter avec runAsNonRoot: true."
+        pattern:
+          spec:
+            securityContext:
+              runAsNonRoot: true
+
+    - name: check-resource-limits
+      match:
+        any:
+          - resources:
+              kinds:
+                - Pod
+              namespaces:
+                - applications
+      validate:
+        message: "Chaque conteneur doit définir des limits CPU et mémoire."
+        pattern:
+          spec:
+            containers:
+              - resources:
+                  limits:
+                    cpu: "?*"
+                    memory: "?*"
+
+    - name: check-allowprivilegeescalation
+      match:
+        any:
+          - resources:
+              kinds:
+                - Pod
+              namespaces:
+                - applications
+      validate:
+        message: "allowPrivilegeEscalation doit être à false."
+        pattern:
+          spec:
+            containers:
+              - securityContext:
+                  allowPrivilegeEscalation: false
+
+    - name: check-readonlyrootfilesystem
+      match:
+        any:
+          - resources:
+              kinds:
+                - Pod
+              namespaces:
+                - applications
+      validate:
+        message: "readOnlyRootFilesystem doit être à true."
+        pattern:
+          spec:
+            containers:
+              - securityContext:
+                  readOnlyRootFilesystem: true
