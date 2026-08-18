@@ -25,9 +25,7 @@ dependency-check \
     --format XML \
     --out "$REPORT_DIR" \
     --nvdApiKey "$NVD_API_KEY" \
-    --disableOssIndex \
-    --disableNodeAudit \
-    --disableAssembly
+    --disableOssIndex 
 
 echo "======================================="
 echo "Dependency-Check analysis completed."
