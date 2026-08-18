@@ -23,7 +23,6 @@ spec:
 
     spec:
 
-      # SECURE: Définit le groupe de fichiers partagés et impose le mode non-root globalement
       securityContext:
         runAsNonRoot: true
         fsGroup: 82
