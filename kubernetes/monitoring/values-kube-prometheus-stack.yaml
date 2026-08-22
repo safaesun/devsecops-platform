@@ -47,8 +47,8 @@ grafana:
       cpu: 100m
       memory: 256Mi
     limits:
-      cpu: 400m
-      memory: 512Mi
+      cpu: 500m
+      memory: 768Mi
   adminPassword: "changeme-avant-prod"
   livenessProbe:
     httpGet:
@@ -63,7 +63,7 @@ grafana:
       path: /api/health
       port: 3000
     initialDelaySeconds: 60
-    timeoutSeconds: 5
+    timeoutSeconds: 15
     periodSeconds: 10
     failureThreshold: 10
 

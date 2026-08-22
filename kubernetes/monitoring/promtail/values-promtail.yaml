@@ -43,8 +43,17 @@ config:
 
 resources:
   requests:
-    cpu: 20m
-    memory: 32Mi
+    cpu: 50m
+    memory: 64Mi
   limits:
-    cpu: 100m
-    memory: 96Mi
+    cpu: 250m
+    memory: 128Mi
+
+readinessProbe:
+  httpGet:
+    path: /ready
+    port: 3101
+  initialDelaySeconds: 10
+  timeoutSeconds: 10
+  periodSeconds: 10
+  failureThreshold: 5
