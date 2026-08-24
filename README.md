@@ -243,7 +243,7 @@ smee \
 | `APP_REPOSITORY` | `$.repository.clone_url` | JSONPath |
 | `APP_BRANCH` | `$.ref` | JSONPath |
 
-Token de sécurité : `devsecops`
+Token de sécurité : `xxxxx`
 Options activées : *Print post content*, *Print contributed variables*
 
 ### Configuration du webhook côté dépôt applicatif (GitHub)
